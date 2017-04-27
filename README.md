@@ -17,5 +17,5 @@ Future Enhancements (v1.1):
 - Make the list swipable from the bottom to top.
 
 <p align="center">
-  <https://cloud.githubusercontent.com/assets/19783321/25508045/9dba657e-2b7d-11e7-886a-60de0cd27dca.png" width="300"/>
+  <img src="https://cloud.githubusercontent.com/assets/19783321/25508045/9dba657e-2b7d-11e7-886a-60de0cd27dca.png" width="300"/>
 </p>
