@@ -26,7 +26,6 @@ public class LocationsListFragments extends Fragment {
     }
 
 
-
     // TODO: Rename and change types and number of parameters
     public static LocationsListFragments newInstance() {
         LocationsListFragments fragment = new LocationsListFragments();
@@ -45,7 +44,7 @@ public class LocationsListFragments extends Fragment {
         //creating our recycler view
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recycler_locations);
         recyclerView.setHasFixedSize(true);
-        //setting the adapter on the recylerview...
+        //setting the adapter on the recylerview and getting location list from the data services ...
         LocationAdapter locationAdapter = new LocationAdapter(DataService.getInstance().getBootStrapLocationWithin10MilesOfZip("L5R3W1"));
         recyclerView.setAdapter(locationAdapter);
         //Setting orientation for recycler view...

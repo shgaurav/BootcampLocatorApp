@@ -13,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.gaurav.bootcamplocator.R;
+import com.example.gaurav.bootcamplocator.activities.MapsActivity;
 import com.example.gaurav.bootcamplocator.model.DevSlopes;
 import com.example.gaurav.bootcamplocator.services.DataService;
 import com.google.android.gms.fitness.data.DataSet;
@@ -27,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,7 +70,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_main, container, false);
-
+        //loading the map...
         SupportMapFragment mapFragment = (SupportMapFragment)getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         //loading the locations list frangment on the main fragment...
@@ -90,20 +93,21 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 //Looking for input on the searchbar and checking when enter is pressed...
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)){
+                    //perform action on key pressed...
                     zip = zipText.getText().toString();
+                    Toast.makeText(getContext(), zip, Toast.LENGTH_SHORT).show();
                     //Dismiss the keyboard
                     InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(zipText.getWindowToken(), 0);
-
-                    //pass read zipcode to updateMapZip function...
-                    //updateMapForZip("L5R3W1");
+                    updateMapForZip(zip);
+                    showList();
                     return true;
                 }
                 return false;
             }
         });
         //Show the locations recycler view/list to the user when the user enters a zip...
-        showList();
+        hideList();
         return v;
     }
 
@@ -118,6 +122,7 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
     }
 
@@ -128,24 +133,24 @@ public class MainFragment extends Fragment implements OnMapReadyCallback {
             mMap.addMarker(userMarker);
             Log.v("DONKEY", "Current Location");
         }
-
+        //geocoding to find zip of current users location retrieved from the phone...
         Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         try {
             List<android.location.Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-            String zip = addresses.get(0).getPostalCode();
-            updateMapForZip(zip);
+            String postal_code = addresses.get(0).getPostalCode();
+            updateMapForZip(postal_code);
         }
         catch (IOException exception){
             //catching IO.
         }
 
-        updateMapForZip("L5R3W1");
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
     }
 
-    private void updateMapForZip(String zipcode){
+    private void updateMapForZip(String zip_code){
 
-        ArrayList<DevSlopes> locations = DataService.getInstance().getBootStrapLocationWithin10MilesOfZip(zipcode);
+        Toast.makeText(getContext(), zip_code, Toast.LENGTH_SHORT).show();
+        ArrayList<DevSlopes> locations = DataService.getInstance().getBootStrapLocationWithin10MilesOfZip(zip_code);
 
         for (int x = 0; x < locations.size(); x++){
             DevSlopes loc = locations.get(x);

@@ -33,6 +33,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.On
     private GoogleApiClient mGoogleApiClient;
     final int PERMISSION_LOCATION = 111;
     private MainFragment mainFragment;
+    public String zip = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +95,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.On
 
     @Override
     public void onLocationChanged(Location location) {
-        location.getLongitude();
+        //location.getLongitude();
         Log.v("DONKEY", "Long: " + location.getLongitude() + "Lat: " + location.getLatitude());
         mainFragment.setUserMarkers(new LatLng(location.getLatitude(), location.getLongitude()));
     }
